@@ -17,7 +17,11 @@
 
 // Configuration
 static final int DENSITY = 3;
-static final float FACTOR = 0.5f;
+static final float FACTOR = 0.67f;
+static final boolean FIXED = false;
+static final int SHAPE = 0; // 0 = ellipse; 1 = rectangle; 2 = triangle; 3 = curve
+static final boolean RANDOM = true;
+static final int SEED = 571;
 
 // Globals
 int n = (int) Math.pow(DENSITY, 1f - FACTOR);
@@ -29,6 +33,7 @@ float r, g, b;
 
 // Screen setup
 void setup() {
+  if (!RANDOM) randomSeed(SEED);
   fullScreen();
   //size(1600, 1000);
   //smooth();
@@ -57,22 +62,30 @@ void draw() {
     fill(rr, gg, bb, aa);
 
     // Draw object
-    switch (int(random(4))) {
+    switch (FIXED ? SHAPE : int(random(4))) {
       case 0:
-        ellipse(random(0, width), random(0, height), random(0, width / 2), random(0, height / 2));
+        ellipse(
+          i + (random(width) - (width / 2)), random(height),
+          random(width / 2), random(height / 2));
         break;
       case 1:
-        rect(random(0, width), random(0, height), random(0, width / 2), random(0, height / 2), random(0, 32));
+        rect(
+          i + (random(width) - (width / 2)), random(height),
+          random(width / 2), random(height / 2),
+          random(32));
         break;
       case 2:
-        triangle(random(0, width), random(0, height), random(0, width), random(0, height), random(0, width), random(0, height));
+        triangle(
+          i + (random(width) - (width / 2)), random(height),
+          i + (random(width) - (width / 2)), random(height),
+          i + (random(width) - (width / 2)), random(height));
         break;
       case 3:
         fill(255, 0); // Just draw the curve
         curve(
            i, 0,
-           i + (random(0, width) - (width / 2)), random(0, height),
-           i + (random(0, width) - (width / 2)), random(0, height),
+           i + (random(width) - (width / 2)), random(height),
+           i + (random(width) - (width / 2)), random(height),
            i, height);
         break;
     }
